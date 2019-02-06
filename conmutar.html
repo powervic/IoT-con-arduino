@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ON/Off</title>
+</head>
+<body>
+<button id="button" href="#">Apagar rojo</button>
+<button id="button2">Encender verde</button>
+<button id="button3">Enciende rojo</button>
+<button id="button4">Apaga verde</button>
+<button id="button5">S.O.S.</button>
+<script src="jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    var socket=io.connect('http://localhost:3000');
+    $(document).ready(function(){
+
+        $('#button2').on("click", function(e){
+            socket.emit('foco1-on');
+            e.preventDefault();
+        });
+        $('#button3').on("click", function(e){
+            socket.emit('foco2-on');
+            e.preventDefault();
+        });
+        $('#button4').on("click", function(e){
+            socket.emit('foco1-off');
+            e.preventDefault();
+        });
+        $('#button').on("click", function(e){
+            socket.emit('foco2-off');
+            e.preventDefault();
+        });
+        $('#button5').on("click", function(e){
+            socket.emit('foco1-off');
+            socket.emit('foco2-off');
+            punto(1);
+            punto(3);
+            punto(5);
+            raya(7);
+            raya(10);
+            raya(13);
+            punto(16);
+            punto(18);
+            punto(20);
+        });
+    });
+
+    function punto(i) {
+        setTimeout(function(){
+            console.log(".");
+            socket.emit('foco1-on');
+        }, 1000*i);
+        setTimeout(function(){
+            socket.emit('foco1-off');
+        }, 1000*i+1000);
+    }
+    function raya(i) {
+        setTimeout(function(){
+            console.log("-");
+            socket.emit('foco2-on');
+        }, 1000*i);
+        setTimeout(function(){
+            socket.emit('foco2-off');
+        }, 1000*i+2000);
+    }
+
+</script>
+</body>
+</html>
